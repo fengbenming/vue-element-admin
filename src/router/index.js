@@ -116,6 +116,57 @@ export const constantRoutes = [
  */
 export const asyncRoutes = [
   {
+    path: '',
+    component: Layout,
+    // redirect: 'magic',
+    alwaysShow: true, // will always show the root menu
+    meta: {
+      roles: ['admin', 'editor'],
+      title: '魔方',
+      icon: 'list',
+      noCache: true,
+      breadcrumb: false
+    },
+    children: [
+      {
+        path: 'sell',
+        component: () => import('@/views/magic/sell'),
+        name: '销售统计',
+        meta: { title: '销售统计', noCache: true }
+      },
+      {
+        path: '',
+        component: () => import('@/views/dashboard/index'),
+        name: '采购统计',
+        meta: { title: '采购统计', icon: '', noCache: true, affix: true }
+      },
+      {
+        path: '',
+        component: () => import('@/views/dashboard/index'),
+        name: '价格预警',
+        meta: { title: '价格预警', icon: '', noCache: true, affix: true }
+      },
+      {
+        path: '',
+        component: () => import('@/views/dashboard/index'),
+        name: '分类统计',
+        meta: { title: '分类统计', icon: '', noCache: true, affix: true }
+      },
+      {
+        path: '',
+        component: () => import('@/views/dashboard/index'),
+        name: '品牌统计',
+        meta: { title: '品牌统计', icon: '', noCache: true, affix: true }
+      },
+      {
+        path: '',
+        component: () => import('@/views/dashboard/index'),
+        name: '价格历史',
+        meta: { title: '价格历史', icon: '', noCache: true, affix: true }
+      }
+    ]
+  },
+  {
     path: '/permission',
     component: Layout,
     redirect: '/permission/page',
