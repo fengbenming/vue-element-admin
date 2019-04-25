@@ -18,7 +18,7 @@ export default {
   methods: {
     refreshData() {
       var param = {}
-      // param.storageType = '-1'
+      param.storageType = '-1'
       everyDaySellData(param).then(response => {
         store.commit('sellChart/refreshChart', response)
       })

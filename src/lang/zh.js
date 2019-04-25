@@ -166,5 +166,20 @@ export default {
     tagsView: '开启 Tags-View',
     fixedHeader: '固定 Header',
     sidebarLogo: '侧边栏 Logo'
+  },
+  magic: {
+    websiteName: '站点',
+    category: '分类',
+    category3: '三级分类',
+    brand: '品牌',
+    sellPrice: '销售额',
+    sellNum: '销售量',
+    date: '日期',
+    dateDimension: '周期',
+    fromPrice: '原价',
+    toPrice: '调整价',
+    storage: '库存',
+    productName: '产品名称',
+    price: '价格'
   }
 }

@@ -131,38 +131,50 @@ export const asyncRoutes = [
       {
         path: 'sell',
         component: () => import('@/views/magic/sell'),
-        name: '销售统计',
-        meta: { title: '销售统计', noCache: true }
+        name: '单日销售统计',
+        meta: { title: '单日销售统计', noCache: false }
       },
       {
-        path: '',
-        component: () => import('@/views/dashboard/index'),
-        name: '采购统计',
-        meta: { title: '采购统计', icon: '', noCache: true, affix: true }
+        path: 'purchase',
+        component: () => import('@/views/magic/purchase'),
+        name: '单日采购统计',
+        meta: { title: '单日采购统计', icon: '', noCache: false, affix: true }
       },
       {
-        path: '',
-        component: () => import('@/views/dashboard/index'),
+        path: 'brand',
+        component: () => import('@/views/magic/brand'),
+        name: '分类品牌统计',
+        meta: { title: '分类品牌统计', icon: '', noCache: false, affix: true }
+      },
+      {
+        path: 'productSell',
+        component: () => import('@/views/magic/productSell'),
+        name: '产品销量统计',
+        meta: { title: '产品销量统计', icon: '', noCache: true, affix: true }
+      },
+      {
+        path: 'priceChange',
+        component: () => import('@/views/magic/priceChange'),
         name: '价格预警',
         meta: { title: '价格预警', icon: '', noCache: true, affix: true }
       },
       {
-        path: '',
-        component: () => import('@/views/dashboard/index'),
-        name: '分类统计',
-        meta: { title: '分类统计', icon: '', noCache: true, affix: true }
+        path: 'priceRelated',
+        component: () => import('@/views/magic/priceRelated'),
+        name: '价格比对',
+        meta: { title: '价格比对', icon: '', noCache: true, affix: true }
       },
       {
         path: '',
         component: () => import('@/views/dashboard/index'),
-        name: '品牌统计',
-        meta: { title: '品牌统计', icon: '', noCache: true, affix: true }
+        name: '历史价格',
+        meta: { title: '历史价格', icon: '', noCache: true, affix: true }
       },
       {
         path: '',
         component: () => import('@/views/dashboard/index'),
-        name: '价格历史',
-        meta: { title: '价格历史', icon: '', noCache: true, affix: true }
+        name: '搜一搜',
+        meta: { title: '搜一搜', icon: '', noCache: true, affix: true }
       }
     ]
   },

@@ -166,5 +166,12 @@ export default {
     tagsView: 'Open Tags-View',
     fixedHeader: 'Fixed Header',
     sidebarLogo: 'Sidebar Logo'
+  },
+  magic: {
+    websiteName: '站点',
+    category: '分类',
+    brand: '品牌',
+    sell: '销售额',
+    date: '日期'
   }
 }
