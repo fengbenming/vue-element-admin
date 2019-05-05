@@ -23,7 +23,9 @@
         style="width: 150px"
         type="date"
         placeholder="选择日期"
+        format="yyyy-MM-dd"
         value-format="yyyy-MM-dd"
+        :default-value="defaultValue"
       />
       <el-button
         v-waves
@@ -43,7 +45,9 @@
       highlight-current-row
       height="500"
       style="width: 100%;"
+      :row-class-name="tableRowClassName"
     >
+      >
       <el-table-column type="index" />
       <el-table-column :label="$t('magic.websiteName')" prop="id" align="center" width="80">
         <template slot-scope="scope">
@@ -237,7 +241,7 @@ export default {
   data() {
     return {
       tableKey: 0,
-      list: null,
+      list: [],
       total: 0,
       listLoading: true,
       listQuery: {
@@ -247,13 +251,14 @@ export default {
         title: undefined,
         type: undefined,
         sort: '+id',
-        websiteName: 'aiyaku',
+        websiteName: 'all',
         dateDimension: 'd',
-        date: '2019-04-21'
+        date: null
       },
       brandSet: new Set(),
       categorySet: new Set(),
       websiteNames: [
+        { label: '所有', key: 'all' },
         { label: '口腔新干线', key: '202832' },
         { label: '爱牙库', key: 'aiyaku' },
         { label: '牙医帮', key: 'yayibang' }
@@ -304,21 +309,33 @@ export default {
         ]
       },
       downloadLoading: false,
-      yesterday: new Date()
+      yesterday: new Date(),
+      defaultValue: null
     }
   },
   created() {
     this.getList()
   },
   mounted() {
-    var preDate = new Date(new Date().getTime() - 24 * 60 * 60 * 1000)
-    this.listQuery.date = preDate.toJSON().split('T')[0]
+    const start = new Date()
+    start.setTime(start.getTime() - 3600 * 1000 * 24 * 1)
+    this.listQuery.date = parseTime(start, '{y}-{m}-{d}')
   },
   methods: {
     getList() {
+      this.listLoading = true
       productPriceChangeData(this.listQuery).then(response => {
         console.log(response)
-        this.list = response.priceRecord
+        var j = 0
+        this.list = []
+        for (var i in response.priceRecord) {
+          var res = response.priceRecord[i]
+          if (res.ToPrice != 0 && res.FromPrice != 0) {
+            this.list[j] = res
+            j++
+          }
+        }
+        // this.list = response.priceRecord;
         // this.total = response.data.total
 
         this.brandSet = new Set()
@@ -333,10 +350,22 @@ export default {
         }
 
         // Just to simulate the time of the request
-        setTimeout(() => {
-          this.listLoading = false
-        }, 1.5 * 1000)
+        this.listLoading = false
       })
+      setTimeout(() => {
+        this.listLoading = false
+      }, 1.5 * 1000)
+    },
+    tableRowClassName({ row, rowIndex }) {
+      if (row.ToPrice != 0 && row.FromPrice != 0) {
+        if (row.ToPrice < row.FromPrice) {
+          return 'down-row'
+        }
+        if (row.ToPrice > row.FromPrice) {
+          return 'up-row'
+        }
+      }
+      return ''
     },
     handleFilter() {
       this.listQuery.page = 1
@@ -483,3 +512,13 @@ export default {
   }
 }
 </script>
+
+<style>
+.el-table .up-row {
+  /* background: #B1B3B4; */
+}
+
+.el-table .down-row {
+  /* background: #B1B3B4; */
+}
+</style>

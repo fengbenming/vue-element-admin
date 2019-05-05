@@ -22,13 +22,27 @@ import * as filters from './filters' // global filters
 
 import { mockXHR } from '../mock' // simulation data
 
+import global_ from './Global.vue'
+import axios from 'axios'
+
+// 设置全局变量
+Vue.prototype.GLOBAL = global_
 // mock api in github pages site build
-if (process.env.NODE_ENV === 'production') { mockXHR() }
+if (process.env.NODE_ENV === 'production') {
+  mockXHR()
+  axios.defaults.baseURL = global_.PRO_BASE_URL
+} else {
+  mockXHR()
+  axios.defaults.baseURL = global_.LOCAL_BASE_URL
+}
 
 Vue.use(Element, {
   size: Cookies.get('size') || 'medium', // set element-ui default size
-  i18n: (key, value) => i18n.t(key, value)
+  i18n: (key, value) => i18n.t(key, value),
+  global
 })
+
+Vue.prototype.$ajax = axios
 
 // register global utility filters.
 Object.keys(filters).forEach(key => {

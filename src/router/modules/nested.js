@@ -7,7 +7,9 @@ const nestedRouter = {
   component: Layout,
   redirect: '/nested/menu1/menu1-1',
   name: 'Nested',
+  alwaysShow: false,
   meta: {
+    roles: ['admin', 'editor'], // you can set roles in root nav
     title: 'nested',
     icon: 'nested'
   },

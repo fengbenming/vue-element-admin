@@ -111,7 +111,7 @@ export default {
         ],
         yAxis: [
           {
-            type: 'value',
+            type: 'log',
             name: '(%)',
             axisTick: {
               show: false

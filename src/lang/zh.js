@@ -180,6 +180,7 @@ export default {
     toPrice: '调整价',
     storage: '库存',
     productName: '产品名称',
-    price: '价格'
+    price: '价格',
+    productCode: '产品编码'
   }
 }

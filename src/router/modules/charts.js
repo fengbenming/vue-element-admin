@@ -7,7 +7,9 @@ const chartsRouter = {
   component: Layout,
   redirect: 'noredirect',
   name: 'Charts',
+  alwaysShow: false, // will always show the root menu
   meta: {
+    roles: ['admin', 'editor'], // you can set roles in root nav
     title: 'charts',
     icon: 'chart'
   },

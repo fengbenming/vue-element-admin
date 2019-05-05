@@ -6,7 +6,7 @@
         :placeholder="$t('magic.websiteName')"
         clearable
         default-first-option
-        style="width: 110px"
+        style="width: 130px"
         class="filter-item"
       >
         <el-option
@@ -18,26 +18,49 @@
       </el-select>
       <el-date-picker
         v-model="listQuery.date"
-        type="daterange"
-        style="width: 300px;bottom: 4px;"
-        range-separator="-"
-        start-placeholder="开始日期"
-        end-placeholder="结束日期"
-        format="yyyy-MM-dd"
+        clearable
+        class="filter-item"
+        style="width: 150px"
+        type="date"
+        placeholder="选择日期"
         value-format="yyyy-MM-dd"
       />
+      <el-select
+        v-model="listQuery.dateDimension"
+        :placeholder="$t('magic.dateDimension')"
+        clearable
+        style="width: 80px"
+        class="filter-item"
+      >
+        <el-option
+          v-for="item in dateDimensions"
+          :key="item.key"
+          :label="item.label"
+          :value="item.key"
+        />
+      </el-select>
+      <el-select
+        v-model="listQuery.category"
+        :placeholder="$t('magic.category3')"
+        clearable
+        filterable
+        allow-create
+        style="width: 200px"
+        class="filter-item"
+      >
+        <el-option v-for="item in categorySet" :key="item" :label="item" :value="item" />
+      </el-select>
       <el-select
         v-model="listQuery.brand"
         :placeholder="$t('magic.brand')"
         clearable
         filterable
         allow-create
-        style="width: 150px;"
+        style="width: 200px"
         class="filter-item"
       >
         <el-option v-for="item in brandSet" :key="item" :label="item" :value="item" />
       </el-select>
-      <el-input v-model="listQuery.productName" :placeholder="$t('magic.productName')" style="width: 200px;" class="filter-item" />
       <el-button
         v-waves
         class="filter-item"
@@ -73,7 +96,18 @@
           <span>{{ scope.row.WebsiteName }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('magic.category3')" prop="Category" width="150px" align="center">
+      <el-table-column :label="$t('magic.date')" width="150px" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.Date }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        :label="$t('magic.category3')"
+        prop="Category"
+        sortable
+        width="150px"
+        align="center"
+      >
         <template slot-scope="scope">
           <span>{{ scope.row.Category }}</span>
         </template>
@@ -89,31 +123,9 @@
           <span>{{ scope.row.Brand }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('magic.productName')" width="250px" align="center">
+      <el-table-column :label="$t('magic.sellPrice')" prop="Total" sortable width="110px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.ProductName }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        :label="$t('magic.sellNum')"
-        prop="TotalNum"
-        sortable
-        width="110px"
-        align="center"
-      >
-        <template slot-scope="scope">
-          <span>{{ scope.row.TotalNum }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column
-        :label="$t('magic.sellPrice')"
-        prop="TotalPrice"
-        sortable
-        width="110px"
-        align="center"
-      >
-        <template slot-scope="scope">
-          <span>{{ scope.row.TotalPrice }}</span>
+          <span>{{ scope.row.Total }}</span>
         </template>
       </el-table-column>
     </el-table>
@@ -205,7 +217,7 @@ import {
   createArticle,
   updateArticle
 } from '@/api/article'
-import { productSellData } from '@/api/sell'
+import { categorySellData } from '@/api/sell'
 import waves from '@/directive/waves' // Waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
@@ -255,9 +267,7 @@ export default {
         sort: '+id',
         websiteName: 'aiyaku',
         dateDimension: 'd',
-        date: [],
-        productName: null,
-        brand: null
+        date: '2019-04-21'
       },
       brandSet: new Set(),
       categorySet: new Set(),
@@ -311,32 +321,23 @@ export default {
           { required: true, message: 'title is required', trigger: 'blur' }
         ]
       },
-      downloadLoading: false
+      downloadLoading: false,
+      yesterday: new Date()
     }
   },
   created() {
-    // this.getList();
+    this.getList()
   },
   mounted() {
-    const end = new Date()
-    const start = new Date()
-    start.setTime(start.getTime() - 3600 * 1000 * 24 * 1)
-    this.listQuery.date = [
-      parseTime(start, '{y}-{m}-{d}'),
-      parseTime(end, '{y}-{m}-{d}')
-    ]
-    this.getList()
+    var preDate = new Date(new Date().getTime() - 24 * 60 * 60 * 1000)
+    this.listQuery.date = preDate.toJSON().split('T')[0]
   },
   methods: {
     getList() {
-      this.listLoading = true
-      if (this.listQuery.date.length == 2) {
-        this.listQuery.startDate = this.listQuery.date[0]
-        this.listQuery.endDate = this.listQuery.date[1]
-      }
-      productSellData(this.listQuery).then(response => {
-        this.list = response.productSell
-        this.total = response.total
+      categorySellData(this.listQuery).then(response => {
+        console.log(response)
+        this.list = response.categoryBrand
+        // this.total = response.data.total
 
         this.brandSet = new Set()
         this.categorySet = new Set()
@@ -350,11 +351,10 @@ export default {
         }
 
         // Just to simulate the time of the request
-        this.listLoading = false
+        setTimeout(() => {
+          this.listLoading = false
+        }, 1.5 * 1000)
       })
-      setTimeout(() => {
-        this.listLoading = false
-      }, 3 * 1000)
     },
     handleFilter() {
       this.listQuery.page = 1
@@ -501,10 +501,3 @@ export default {
   }
 }
 </script>
-<style lang="scss">
-/* reset element-ui css */
-.el-range-input {
-  height: 20px;
-}
-</style>
-

@@ -7,7 +7,9 @@ const componentsRouter = {
   component: Layout,
   redirect: 'noredirect',
   name: 'ComponentDemo',
+  alwaysShow: false, // will always show the root menu
   meta: {
+    roles: ['admin', 'editor'],
     title: 'components',
     icon: 'component'
   },

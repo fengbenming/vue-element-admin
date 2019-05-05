@@ -5,7 +5,10 @@ const tokens = {
   },
   editor: {
     token: 'editor-token'
-  }
+  },
+  magic:{
+    token:'magic-token'
+  },
 }
 
 const users = {
@@ -18,6 +21,12 @@ const users = {
   'editor-token': {
     roles: ['editor'],
     introduction: 'I am an editor',
+    avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
+    name: 'Normal Editor'
+  },
+  'magic-token': {
+    roles: ['magic'],
+    introduction: 'I am an magic',
     avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
     name: 'Normal Editor'
   }
@@ -39,7 +48,7 @@ export default [
           message: 'Account and password are incorrect.'
         }
       }
-
+      debugger
       return {
         code: 20000,
         data: token

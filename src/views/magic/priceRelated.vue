@@ -1,29 +1,17 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-select
-        v-model="listQuery.websiteName"
-        :placeholder="$t('magic.websiteName')"
-        clearable
-        default-first-option
-        style="width: 130px"
+      <el-input
+        v-model="listQuery.productName"
+        :placeholder="$t('magic.productName')"
+        style="width: 200px;"
         class="filter-item"
-      >
-        <el-option
-          v-for="item in websiteNames"
-          :key="item.key"
-          :label="item.label"
-          :value="item.key"
-        />
-      </el-select>
-      <el-date-picker
-        v-model="listQuery.date"
-        clearable
+      />
+      <el-input
+        v-model="listQuery.productCode"
+        :placeholder="$t('magic.productCode')"
+        style="width: 200px;"
         class="filter-item"
-        style="width: 150px"
-        type="date"
-        placeholder="选择日期"
-        value-format="yyyy-MM-dd"
       />
       <el-button
         v-waves
@@ -43,57 +31,28 @@
       highlight-current-row
       height="500"
       style="width: 100%;"
+      :span-method="arraySpanMethod"
     >
       <el-table-column type="index" />
       <el-table-column :label="$t('magic.websiteName')" prop="id" align="center" width="80">
         <template slot-scope="scope">
-          <span>{{ scope.row[0] }}</span>
+          <span>{{ scope.row.websiteName }}</span>
         </template>
       </el-table-column>
       <el-table-column
         :label="$t('magic.productName')"
-        prop="row[1]"
+        prop="row.productName"
         sortable
         width="160px"
         align="center"
       >
         <template slot-scope="scope">
-          <span>{{ scope.row[1] }}</span>
+          <span>{{ scope.row.saleName }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('magic.price')" width="70px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row[2] }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column :label="$t('magic.websiteName')" prop="id" align="center" width="80">
-        <template slot-scope="scope">
-          <span>{{ scope.row[3] }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column :label="$t('magic.productName')" width="160px" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row[4] }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column :label="$t('magic.price')" width="70px" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row[5] }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column :label="$t('magic.websiteName')" prop="id" align="center" width="80">
-        <template slot-scope="scope">
-          <span>{{ scope.row[6] }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column :label="$t('magic.productName')" width="160px" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row[7] }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column :label="$t('magic.price')" width="70px" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row[8] }}</span>
+          <span>{{ scope.row.price }}</span>
         </template>
       </el-table-column>
     </el-table>
@@ -235,7 +194,8 @@ export default {
         sort: '+id',
         websiteName: 'aiyaku',
         dateDimension: 'd',
-        date: '2019-04-21'
+        productName: '',
+        productCode: ''
       },
       brandSet: new Set(),
       categorySet: new Set(),
@@ -290,17 +250,43 @@ export default {
         ]
       },
       downloadLoading: false,
-      yesterday: new Date()
+      yesterday: new Date(),
+      specId: null
     }
   },
   created() {
     this.getList()
   },
-  mounted() {
-    var preDate = new Date(new Date().getTime() - 24 * 60 * 60 * 1000)
-    this.listQuery.date = preDate.toJSON().split('T')[0]
-  },
+  mounted() {},
   methods: {
+    arraySpanMethod({ row, column, rowIndex, columnIndex }) {
+      if (columnIndex === 0) {
+        if (this.list[rowIndex].mergeNum > 0) {
+          return {
+            rowspan: this.list[rowIndex].mergeNum,
+            colspan: this.list[rowIndex].mergeNum > 0 ? 1 : 0
+          }
+        } else {
+          return {
+            rowspan: 0,
+            colspan: 0
+          }
+        }
+      }
+      // if (columnIndex === 0) {
+      //   if (rowIndex % 3 === 0) {
+      //     return {
+      //       rowspan: 3,
+      //       colspan: 1
+      //     };
+      //   } else {
+      //     return {
+      //       rowspan: 0,
+      //       colspan: 0
+      //     };
+      //   }
+      // }
+    },
     getList() {
       productRelatedData(this.listQuery).then(response => {
         console.log(response)

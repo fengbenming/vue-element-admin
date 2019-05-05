@@ -74,6 +74,9 @@ export const constantRoutes = [
     path: '',
     component: Layout,
     redirect: 'dashboard',
+    meta: {
+      roles: ['admin', 'editor'] // you can set roles in root nav
+    },
     children: [
       {
         path: 'dashboard',
@@ -86,6 +89,9 @@ export const constantRoutes = [
   {
     path: '/documentation',
     component: Layout,
+    meta: {
+      roles: ['admin', 'editor'] // you can set roles in root nav
+    },
     children: [
       {
         path: 'index',
@@ -99,6 +105,9 @@ export const constantRoutes = [
     path: '/guide',
     component: Layout,
     redirect: '/guide/index',
+    meta: {
+      roles: ['admin', 'editor'] // you can set roles in root nav
+    },
     children: [
       {
         path: 'index',
@@ -119,9 +128,9 @@ export const asyncRoutes = [
     path: '',
     component: Layout,
     // redirect: 'magic',
-    alwaysShow: true, // will always show the root menu
+    alwaysShow: false, // will always show the root menu
     meta: {
-      roles: ['admin', 'editor'],
+      roles: ['admin', 'editor', 'magic'],
       title: '魔方',
       icon: 'list',
       noCache: true,
@@ -132,49 +141,73 @@ export const asyncRoutes = [
         path: 'sell',
         component: () => import('@/views/magic/sell'),
         name: '单日销售统计',
-        meta: { title: '单日销售统计', noCache: false }
+        meta: { title: '单日销售统计', noCache: false, roles: ['admin', 'editor', 'magic'] }
       },
       {
         path: 'purchase',
         component: () => import('@/views/magic/purchase'),
         name: '单日采购统计',
-        meta: { title: '单日采购统计', icon: '', noCache: false, affix: true }
+        meta: { title: '单日采购统计', icon: '', noCache: false, roles: ['admin', 'editor', 'magic'] }
       },
       {
         path: 'brand',
         component: () => import('@/views/magic/brand'),
         name: '分类品牌统计',
-        meta: { title: '分类品牌统计', icon: '', noCache: false, affix: true }
+        meta: { title: '分类品牌统计', icon: '', noCache: false }
       },
       {
         path: 'productSell',
         component: () => import('@/views/magic/productSell'),
         name: '产品销量统计',
-        meta: { title: '产品销量统计', icon: '', noCache: true, affix: true }
+        meta: { title: '产品销量统计', icon: '', noCache: false, keepAlive: true }
       },
       {
         path: 'priceChange',
         component: () => import('@/views/magic/priceChange'),
-        name: '价格预警',
-        meta: { title: '价格预警', icon: '', noCache: true, affix: true }
+        name: '价格变动',
+        meta: { title: '价格变动', icon: '', noCache: true }
       },
       {
         path: 'priceRelated',
         component: () => import('@/views/magic/priceRelated'),
         name: '价格比对',
-        meta: { title: '价格比对', icon: '', noCache: true, affix: true }
+        meta: { title: '价格比对', icon: '', noCache: true }
       },
       {
-        path: '',
-        component: () => import('@/views/dashboard/index'),
-        name: '历史价格',
-        meta: { title: '历史价格', icon: '', noCache: true, affix: true }
+        path: 'priceTrend',
+        component: () => import('@/views/magic/priceTrend'),
+        name: '历史趋势',
+        meta: { title: '历史趋势', icon: '', noCache: true }
       },
       {
-        path: '',
-        component: () => import('@/views/dashboard/index'),
+        path: 'soso',
+        component: () => import('@/views/magic/soso'),
         name: '搜一搜',
-        meta: { title: '搜一搜', icon: '', noCache: true, affix: true }
+        meta: { title: '搜一搜(待续)', icon: '', noCache: true }
+      }
+    ]
+  },
+  {
+    path: '/related',
+    component: Layout,
+    name: '数据关联品台',
+    meta: {
+      roles: ['admin', 'editor', 'magic'], // you can set roles in root nav
+      title: '数据关联品台',
+      icon: 'peoples'
+    },
+    children: [
+      {
+        path: 'brandRelate',
+        component: () => import('@/views/relate/brandRelate'),
+        name: '品牌关联',
+        meta: { title: '品牌关联', icon: 'icon', noCache: true }
+      },
+      {
+        path: 'productRelate',
+        component: () => import('@/views/relate/productRelate'),
+        name: '产品关联',
+        meta: { title: '产品关联', icon: 'icon', noCache: true }
       }
     ]
   },
@@ -182,7 +215,7 @@ export const asyncRoutes = [
     path: '/permission',
     component: Layout,
     redirect: '/permission/page',
-    alwaysShow: true, // will always show the root menu
+    alwaysShow: false, // will always show the root menu
     name: 'Permission',
     meta: {
       title: 'permission',
@@ -223,6 +256,9 @@ export const asyncRoutes = [
   {
     path: '/icon',
     component: Layout,
+    meta: {
+      roles: ['admin', 'editor'] // you can set roles in root nav
+    },
     children: [
       {
         path: 'index',
@@ -245,6 +281,7 @@ export const asyncRoutes = [
     redirect: '/example/list',
     name: 'Example',
     meta: {
+      roles: ['admin', 'editor'], // you can set roles in root nav
       title: 'example',
       icon: 'example'
     },
@@ -274,6 +311,10 @@ export const asyncRoutes = [
   {
     path: '/tab',
     component: Layout,
+    name: 'tab',
+    meta: {
+      roles: ['admin', 'editor'] // you can set roles in root nav
+    },
     children: [
       {
         path: 'index',
@@ -291,7 +332,8 @@ export const asyncRoutes = [
     name: 'ErrorPages',
     meta: {
       title: 'errorPages',
-      icon: '404'
+      icon: '404',
+      roles: ['admin', 'editor'] // you can set roles in root nav
     },
     children: [
       {
@@ -313,6 +355,9 @@ export const asyncRoutes = [
     path: '/error-log',
     component: Layout,
     redirect: 'noredirect',
+    meta: {
+      roles: ['admin', 'editor'] // you can set roles in root nav
+    },
     children: [
       {
         path: 'log',
@@ -330,7 +375,8 @@ export const asyncRoutes = [
     name: 'Excel',
     meta: {
       title: 'excel',
-      icon: 'excel'
+      icon: 'excel',
+      roles: ['admin', 'editor'] // you can set roles in root nav
     },
     children: [
       {
@@ -366,7 +412,10 @@ export const asyncRoutes = [
     redirect: '/zip/download',
     alwaysShow: true,
     name: 'Zip',
-    meta: { title: 'zip', icon: 'zip' },
+    meta: {
+      title: 'zip', icon: 'zip',
+      roles: ['admin', 'editor'] // you can set roles in root nav
+    },
     children: [
       {
         path: 'download',
@@ -381,6 +430,9 @@ export const asyncRoutes = [
     path: '/pdf',
     component: Layout,
     redirect: '/pdf/index',
+    meta: {
+      roles: ['admin', 'editor'] // you can set roles in root nav
+    },
     children: [
       {
         path: 'index',
@@ -400,6 +452,9 @@ export const asyncRoutes = [
     path: '/theme',
     component: Layout,
     redirect: 'noredirect',
+    meta: {
+      roles: ['admin', 'editor'] // you can set roles in root nav
+    },
     children: [
       {
         path: 'index',
@@ -414,6 +469,9 @@ export const asyncRoutes = [
     path: '/clipboard',
     component: Layout,
     redirect: 'noredirect',
+    meta: {
+      roles: ['admin', 'editor'] // you can set roles in root nav
+    },
     children: [
       {
         path: 'index',
@@ -427,6 +485,9 @@ export const asyncRoutes = [
   {
     path: '/i18n',
     component: Layout,
+    meta: {
+      roles: ['admin', 'editor'] // you can set roles in root nav
+    },
     children: [
       {
         path: 'index',
@@ -440,6 +501,9 @@ export const asyncRoutes = [
   {
     path: 'external-link',
     component: Layout,
+    meta: {
+      roles: ['admin', 'editor'] // you can set roles in root nav
+    },
     children: [
       {
         path: 'https://github.com/PanJiaChen/vue-element-admin',

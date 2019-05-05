@@ -7,7 +7,9 @@ const tableRouter = {
   component: Layout,
   redirect: '/table/complex-table',
   name: 'Table',
+  alwaysShow: false,
   meta: {
+    roles: ['admin', 'editor'], // you can set roles in root nav
     title: 'Table',
     icon: 'table'
   },
