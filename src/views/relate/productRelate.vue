@@ -22,23 +22,29 @@
     </div>
     <el-row style="left:15%">
       <div>
-        <el-col v-for="(o, index) in list" :key="o.websiteNames" :span="8" :offset="index > 0 ? 2 : 0">
+        <el-col
+          v-for="(o, index) in list"
+          :key="o.websiteNames"
+          :span="8"
+          :offset="index > 0 ? 2 : 0"
+        >
           <el-card :body-style="{ padding: '0px' }">
-            <img
-              :src="o.pic"
-              class="image"
-              @click="nextPic(o)"
-            >
+            <img :src="o.pic" class="image" @click="nextPic(o)">
             <div style="padding: 5px;text-align: left; border:10px">
-              站点:<span> {{ o.websiteName }}</span>
-              品牌: <span>{{ o.brand }}</span>
-              价格:<span style="color:red"> {{ o.price }}￥</span>
+              站点:
+              <span>{{ o.websiteName }}</span>
+              品牌:
+              <span>{{ o.brand }}</span>
+              价格:
+              <span style="color:red">{{ o.price }}￥</span>
             </div>
             <div style="padding: 5px;text-align: left;">
-              <span style="font-weight: bold;">分类路径: </span><span>{{ o.categoryName }}</span>
+              <span style="font-weight: bold;">分类路径:</span>
+              <span>{{ o.categoryName }}</span>
             </div>
             <div style="padding: 5px;text-align: left;">
-              <span style="font-weight: bold;">销售名称:</span><span> {{ o.saleName }}</span>
+              <span style="font-weight: bold;">销售名称:</span>
+              <span>{{ o.saleName }}</span>
             </div>
           </el-card>
         </el-col>
@@ -103,50 +109,51 @@
 </style>
 
 <script>
-import { productChoise, productConfirm } from '@/api/relate'
+import { productChoise, productConfirm } from "@/api/relate";
 export default {
   data() {
     return {
       i: 0,
       listLoading: false,
       param: {
-        srcBrand: '',
-        dstBrand: '',
-        srcWebsite: '202832',
-        dstWebsite: 'aiyaku',
-        choiseType: '1'
+        srcBrand: "",
+        dstBrand: "",
+        srcWebsite: "202832",
+        dstWebsite: "aiyaku",
+        choiseType: "1"
       },
       list: null,
       websiteNames: [
         // { label: "口腔新干线", key: "202832" },
-        { label: '爱牙库', key: 'aiyaku' },
-        { label: '牙医帮', key: 'yayibang' }
+        { label: "爱牙库", key: "aiyaku" },
+        { label: "牙医帮", key: "yayibang" }
       ]
-    }
+    };
   },
   created() {
-    this.getLists()
+    this.getLists();
   },
   methods: {
     nextPic(items) {
-      items.pic = items.pics[this.i++ % items.pics.length]
+      items.pic = items.pics[this.i++ % items.pics.length];
     },
     getLists() {
-      console.log(this.param)
+      console.log(this.param);
       productChoise(this.param).then(responose => {
-        console.log(responose)
-        this.list = responose.data
-      })
+        console.log(responose);
+        this.list = responose.data;
+      });
     },
     confirmProduct(relationType) {
-      this.listLoading = true
+      this.listLoading = true;
+      console.log("关联数据", this.list);
       productConfirm(this.list, relationType).then(response => {
         if (response.code == 20000) {
-          this.getLists()
-          this.listLoading = false
+          this.getLists();
+          this.listLoading = false;
         }
-      })
+      });
     }
   }
-}
+};
 </script>
