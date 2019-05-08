@@ -92,7 +92,7 @@
           <el-button
             size="mini"
             v-if="scope.row.websiteName!='202832' && !scope.row.editing"
-            @click="handleDelete(scope.$index, scope.row)"
+            @click="handleDelete(scope.row)"
           >删除</el-button>
           <!-- <el-button
             size="mini"
@@ -275,7 +275,7 @@ export default {
     },
     tableRowClassName(data) {
       if (data.row.color == "grey") {
-        return "background-color:#f5f7fa;";
+        return "background-color:#f0f9eb;";
       } else {
         return "";
       }
@@ -422,6 +422,22 @@ export default {
       });
       const index = this.list.indexOf(row);
       this.list.splice(index, 1);
+
+      this.listLoading = true;
+      var list = [];
+      list[0] = {
+        productCode: row.mainProductCode,
+        productId: row.mainProductId,
+        websiteName: row.mainWebsiteName
+      };
+      list[1] = row;
+      debugger
+      productConfirm(list, -1).then(response => {
+        if (response.code == 20000) {
+          this.getList();
+          this.listLoading = false;
+        }
+      });
     },
     handleAdd(index, row) {
       row.mergeNum = row.mergeNum + 1;
@@ -439,7 +455,6 @@ export default {
       list[1] = row;
       list[1].item = null;
       list[1].mainRow = null;
-      console.log(list);
       productConfirm(list, 1).then(response => {
         if (response.code == 20000) {
           this.getList();
@@ -448,7 +463,6 @@ export default {
       });
     },
     handleCancel(index, row) {
-      debugger;
       for (var i = index; i >= 0; i--) {
         if (this.list[i].productId == row.mainId) {
           this.list[i].mergeNum = this.list[i].mergeNum - 1;

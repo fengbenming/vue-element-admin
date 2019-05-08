@@ -146,7 +146,6 @@ export default {
     },
     confirmProduct(relationType) {
       this.listLoading = true;
-      console.log("关联数据", this.list);
       productConfirm(this.list, relationType).then(response => {
         if (response.code == 20000) {
           this.getLists();
