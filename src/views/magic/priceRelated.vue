@@ -18,8 +18,61 @@
         class="filter-item"
         type="primary"
         icon="el-icon-search"
-        @click="handleFilter"
+        @click="handleSearch"
       >{{ $t('table.search') }}</el-button>
+
+      <el-select
+        v-model="listQuery.plusType"
+        :placeholder="$t('magic.plusPrice')"
+        clearable
+        default-first-option
+        style="width: 100px"
+        class="filter-item"
+      >
+        <el-option
+          v-for="item in plusPrices"
+          :key="item.key"
+          :label="item.label"
+          :value="item.key"
+        />
+      </el-select>
+      <el-select
+        v-model="listQuery.greatOrLow"
+        :placeholder="$t('magic.websiteName')"
+        clearable
+        default-first-option
+        style="width: 100px"
+        class="filter-item"
+      >
+        <el-option
+          v-for="item in greatOrLow"
+          :key="item.key"
+          :label="item.label"
+          :value="item.key"
+        />
+      </el-select>
+      <el-select
+        v-model="listQuery.websiteName"
+        :placeholder="$t('magic.websiteName')"
+        clearable
+        default-first-option
+        style="width: 100px"
+        class="filter-item"
+      >
+        <el-option
+          v-for="item in websiteNames"
+          :key="item.key"
+          :label="item.label"
+          :value="item.key"
+        />
+      </el-select>
+      <el-button
+        v-waves
+        class="filter-item"
+        type="primary"
+        icon="el-icon-search"
+        @click="handleFilter"
+      >{{ $t('table.filter') }}</el-button>
     </div>
     <el-table
       :key="tableKey"
@@ -82,12 +135,37 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('magic.price')" width="70px" align="center">
+      <el-table-column :label="$t('magic.price')" width="60px" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.price }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="220px">
+      <el-table-column :label="$t('A')" width="60px" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row[1500] }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('B')" width="60px" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row[1501] }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('C')" width="60px" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row[1502] }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('B1')" width="60px" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row[1503] }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('B2')" width="60px" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row[1504] }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" width="150px">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -177,7 +255,8 @@ export default {
       searchResultOptions: [],
       searchLoading: false,
       tableKey: 0,
-      list: null,
+      list: [],
+      backList: [],
       total: 0,
       listLoading: true,
       listQuery: {
@@ -192,10 +271,32 @@ export default {
         productName: "",
         productCode: "",
         keywords: "",
-        cursor: 0
+        cursor: 0,
+        plusType: "1500",
+        greatOrLow: "10"
       },
       brandSet: new Set(),
       categorySet: new Set(),
+      websiteNames: [
+        // { label: "口腔新干线", key: "202832" },
+        { label: "爱牙库", key: "aiyaku" },
+        { label: "牙医帮", key: "yayibang" }
+      ],
+      plusPrices: [
+        // { label: "口腔新干线", key: "202832" },
+        { label: "A", key: "1500" },
+        { label: "B", key: "1501" },
+        { label: "C", key: "1502" },
+        { label: "B1", key: "1503" },
+        { label: "B2", key: "1504" }
+      ],
+      greatOrLow: [
+        // { label: "口腔新干线", key: "202832" },
+        { label: "大于", key: "1" },
+        { label: "小于", key: "-1" },
+        { label: "等于", key: "0" },
+        { label: "大于等于", key: "10" }
+      ],
       websiteNames: [
         // { label: "口腔新干线", key: "202832" },
         { label: "爱牙库", key: "aiyaku" },
@@ -300,6 +401,16 @@ export default {
         console.log(response);
         this.list = response.related;
         // this.total = response.data.total
+        for (var i in this.list) {
+          var item = this.list[i];
+          var splits = item.extraPrice.slice(1, -1).split(",");
+          for (var j in splits) {
+            var ss = splits[j].split(":");
+            var key = ss[0].slice(1, -1);
+            item[key] = ss[1];
+          }
+        }
+        this.backList = this.list; //便于页面做筛选功能
 
         this.brandSet = new Set();
         this.categorySet = new Set();
@@ -318,7 +429,60 @@ export default {
         }, 1.5 * 1000);
       });
     },
-    handleFilter() {
+    handleFilter(value) {
+      var greatOrLow = this.listQuery.greatOrLow;
+      var plusType = this.listQuery.plusType;
+      var websiteName = this.listQuery.websiteName;
+      if (plusType == "" || greatOrLow == "" || websiteName == "") {
+        this.list = this.backList;
+        return;
+      }
+      var plusPrice;
+      var idArr = new Set();
+      for (var i in this.backList) {
+        var item = this.backList[i];
+        if (item.websiteName == "202832") {
+          plusPrice = item[plusType];
+          continue;
+        }
+        if (item.websiteName == websiteName) {
+          if (greatOrLow == "10") {
+            //大于登陆
+            if (plusPrice >= item.price) {
+              idArr.add(item.mainProductId);
+            }
+          }
+          if (greatOrLow == "1") {
+            //大于
+            if (plusPrice > item.price) {
+              idArr.add(item.mainProductId);
+            }
+          }
+          if (greatOrLow == "0") {
+            //等于
+            if (plusPrice == item.price) {
+              idArr.add(item.mainProductId);
+            }
+          }
+          if (greatOrLow == "-1") {
+            //小于
+            if (plusPrice < item.price) {
+              idArr.add(item.mainProductId);
+            }
+          }
+        }
+      }
+      console.log(idArr);
+      var tmpList = [];
+      for (var i in this.backList) {
+        var item = this.backList[i];
+        if (idArr.has(item.productId) || idArr.has(item.mainProductId)) {
+          tmpList.push(item);
+        }
+      }
+      this.list = tmpList;
+    },
+    handleSearch() {
       this.listQuery.page = 1;
       this.getList();
     },
@@ -431,7 +595,7 @@ export default {
         websiteName: row.mainWebsiteName
       };
       list[1] = row;
-      debugger
+      debugger;
       productConfirm(list, -1).then(response => {
         if (response.code == 20000) {
           this.getList();
