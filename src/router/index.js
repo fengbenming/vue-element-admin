@@ -85,7 +85,14 @@ export const constantRoutes = [
         meta: { title: 'dashboard', icon: 'dashboard', noCache: true, affix: true }
       }
     ]
-  },
+  }
+]
+
+/**
+ * asyncRoutes
+ * the routes that need to be dynamically loaded based on user roles
+ */
+export const asyncRoutes = [
   {
     path: '/documentation',
     component: Layout,
@@ -116,14 +123,7 @@ export const constantRoutes = [
         meta: { title: 'guide', icon: 'guide', noCache: true }
       }
     ]
-  }
-]
-
-/**
- * asyncRoutes
- * the routes that need to be dynamically loaded based on user roles
- */
-export const asyncRoutes = [
+  },
   {
     path: '',
     component: Layout,
@@ -453,7 +453,7 @@ export const asyncRoutes = [
     component: Layout,
     redirect: 'noredirect',
     meta: {
-      roles: ['admin', 'editor'] // you can set roles in root nav
+      roles: ['admin', 'editor', 'magic'] // you can set roles in root nav
     },
     children: [
       {
@@ -486,7 +486,7 @@ export const asyncRoutes = [
     path: '/i18n',
     component: Layout,
     meta: {
-      roles: ['admin', 'editor'] // you can set roles in root nav
+      roles: ['admin', 'editor', 'magic'] // you can set roles in root nav
     },
     children: [
       {
