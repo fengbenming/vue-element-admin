@@ -182,6 +182,7 @@ export default {
     storage: '库存',
     productName: '产品名称',
     price: '价格',
-    productCode: '产品编码'
+    productCode: '产品编码',
+    newRelation: '新增'
   }
 }

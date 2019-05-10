@@ -73,6 +73,13 @@
         icon="el-icon-search"
         @click="handleFilter"
       >{{ $t('table.filter') }}</el-button>
+      <el-button
+        v-waves
+        class="filter-item"
+        type="primary"
+        icon="el-icon-search"
+        @click="handleAddNewRelation"
+      >{{ $t('magic.newRelation') }}</el-button>
     </div>
     <el-table
       :key="tableKey"
@@ -88,11 +95,15 @@
       <el-table-column type="index"/>
       <el-table-column :label="$t('magic.websiteName')" prop="id" align="center" width="120">
         <template slot-scope="scope">
-          <div v-if="!scope.row.editing">
+          <div v-if="scope.row.websiteName=='202832' || !scope.row.editing">
             <span>{{ scope.row.websiteName }}</span>
           </div>
           <div v-else>
-            <el-select v-model="listQuery.websiteName" placeholder="选择站点">
+            <el-select
+              v-model="listQuery.websiteName"
+              placeholder="选择站点"
+              @change="resetSearchParam"
+            >
               <el-option
                 v-for="item in websiteNames"
                 :key="item.key"
@@ -112,11 +123,12 @@
       >
         <template slot-scope="scope">
           <div v-if="!scope.row.editing">
-            <span>{{ scope.row.saleName }}</span>
+            <span class="link-type" @click="handleDetail(scope.row)">{{ scope.row.saleName }}</span>
           </div>
           <div v-else>
             <el-select
               v-model="scope.row.item"
+              value-key="productCode"
               filterable
               remote
               reserve-keyword
@@ -203,6 +215,92 @@
       :limit.sync="listQuery.limit"
       @pagination="getList"
     />
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
+      <el-form
+        ref="dataForm"
+        :rules="rules"
+        :model="temp"
+        label-position="left"
+        label-width="70px"
+        style="width: 400px; margin-left:50px;"
+      >
+        <el-form-item :label="$t('magic.websiteName')" prop="srcWebsite">
+          <el-select
+            v-model="temp.srcWebsite"
+            class="filter-item"
+            disabled
+            placeholder="Please select"
+            @change="resetSearchParam"
+          >
+            <el-option
+              v-for="item in websiteNames"
+              :key="item.key"
+              :label="item.label"
+              :value="item.key"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item :label="$t('magic.productName')" prop="srcProductName">
+          <el-select
+            v-model="temp.srcItem"
+            value-key="productCode"
+            filterable
+            reserve-keyword
+            remote
+            placeholder="请输入关键词"
+            :remote-method="searchSrcProductForPop"
+            :loading="searchLoading"
+            @change="handleNewRelationOptionChange($event,'src')"
+          >
+            <el-option
+              v-for="item in searchSrcResultOptions"
+              :key="item.productCode"
+              :label="item.saleName"
+              :value="item"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item :label="$t('magic.websiteName')" prop="dstWebsite">
+          <el-select
+            v-model="temp.dstWebsite"
+            class="filter-item"
+            placeholder="Please select"
+            @change="resetSearchParam"
+          >
+            <el-option
+              v-for="item in websiteNames"
+              :key="item.key"
+              :label="item.label"
+              :value="item.key"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item :label="$t('magic.productName')" prop="dstProductName">
+          <el-select
+            v-model="temp.dstItem"
+            value-key="productCode"
+            filterable
+            reserve-keyword
+            remote
+            placeholder="请输入关键词"
+            :remote-method="searchDstProductForPop"
+            :loading="searchLoading"
+            @change="handleNewRelationOptionChange($event,'dst')"
+          >
+            <el-option
+              v-for="item in searchDstResultOptions"
+              :key="item.productCode"
+              :label="item.saleName"
+              :value="item"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">{{ $t('table.cancel') }}</el-button>
+        <el-button type="primary" @click="handleSaveNewRelation">{{ $t('table.confirm') }}</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -253,6 +351,8 @@ export default {
   data() {
     return {
       searchResultOptions: [],
+      searchSrcResultOptions: [],
+      searchDstResultOptions: [],
       searchLoading: false,
       tableKey: 0,
       list: [],
@@ -277,11 +377,6 @@ export default {
       },
       brandSet: new Set(),
       categorySet: new Set(),
-      websiteNames: [
-        // { label: "口腔新干线", key: "202832" },
-        { label: "爱牙库", key: "aiyaku" },
-        { label: "牙医帮", key: "yayibang" }
-      ],
       plusPrices: [
         // { label: "口腔新干线", key: "202832" },
         { label: "A", key: "1500" },
@@ -298,7 +393,7 @@ export default {
         { label: "大于等于", key: "10" }
       ],
       websiteNames: [
-        // { label: "口腔新干线", key: "202832" },
+        { label: "口腔新干线", key: "202832" },
         { label: "爱牙库", key: "aiyaku" },
         { label: "牙医帮", key: "yayibang" }
       ],
@@ -321,7 +416,15 @@ export default {
         timestamp: new Date(),
         title: "",
         type: "",
-        status: "published"
+        status: "published",
+        srcWebsite: "202832",
+        srcProductId: null,
+        srcProductCode: null,
+        dstWebsite: "aiyaku",
+        dstProductId: null,
+        dstProductCode: null,
+        dstItem: null,
+        srcItem: null
       },
       dialogFormVisible: false,
       dialogStatus: "",
@@ -357,12 +460,41 @@ export default {
   },
   mounted() {},
   methods: {
+    handleAddNewRelation() {
+      this.resetTemp();
+      this.dialogStatus = "create";
+      this.dialogFormVisible = true;
+      this.$nextTick(() => {
+        this.$refs["dataForm"].clearValidate();
+      });
+    },
     handleOptionChange(value, row) {
-      console.log(value, row);
       row.price = value.price;
       row.productId = value.productId;
       row.websiteName = value.websiteName;
       row.productCode = value.productCode;
+      row.saleName = value.saleName;
+    },
+    handleNewRelationOptionChange(row, source) {
+      if (source == "src") {
+        this.temp.srcWebsite = row.websiteName;
+        this.temp.srcProductId = row.productId;
+        this.temp.srcProductCode = row.productCode;
+        this.temp.srcProductName = row.saleName;
+      }
+      if (source == "dst") {
+        this.temp.dstWebsite = row.websiteName;
+        this.temp.dstProductId = row.productId;
+        this.temp.dstProductCode = row.productCode;
+        this.temp.dstProductName = row.saleName;
+      }
+    },
+    searchCommon(options, params) {
+      search(params).then(response => {
+        console.log(response);
+        this.listQuery.cursor = response.cursor;
+        options = response.related;
+      });
     },
     searchProduct(keyword) {
       this.listQuery.keywords = keyword;
@@ -371,6 +503,28 @@ export default {
         console.log(response);
         this.listQuery.cursor = response.cursor;
         this.searchResultOptions = response.related;
+        this.searchLoading = false;
+      });
+    },
+    searchSrcProductForPop(keyword) {
+      this.listQuery.keywords = keyword;
+      this.listQuery.websiteName = this.temp.srcWebsite;
+      this.searchLoading = true;
+      search(this.listQuery).then(response => {
+        console.log(response);
+        this.listQuery.cursor = response.cursor;
+        this.searchSrcResultOptions = response.related;
+        this.searchLoading = false;
+      });
+    },
+    searchDstProductForPop(keyword) {
+      this.listQuery.keywords = keyword;
+      this.listQuery.websiteName = this.temp.dstWebsite;
+      this.searchLoading = true;
+      search(this.listQuery).then(response => {
+        console.log(response);
+        this.listQuery.cursor = response.cursor;
+        this.searchDstResultOptions = response.related;
         this.searchLoading = false;
       });
     },
@@ -514,68 +668,38 @@ export default {
         remark: "",
         timestamp: new Date(),
         title: "",
+        type: "",
         status: "published",
-        type: ""
+        srcWebsite: "202832",
+        srcProductId: null,
+        srcProductCode: null,
+        dstWebsite: "aiyaku",
+        dstProductId: null,
+        dstProductCode: null,
+        dstItem: null,
+        srcItem: null
       };
     },
-    handleCreate() {
-      this.resetTemp();
-      this.dialogStatus = "create";
-      this.dialogFormVisible = true;
-      this.$nextTick(() => {
-        this.$refs["dataForm"].clearValidate();
-      });
-    },
-    createData() {
-      this.$refs["dataForm"].validate(valid => {
-        if (valid) {
-          this.temp.id = parseInt(Math.random() * 100) + 1024; // mock a id
-          this.temp.author = "vue-element-admin";
-          createArticle(this.temp).then(() => {
-            this.list.unshift(this.temp);
-            this.dialogFormVisible = false;
-            this.$notify({
-              title: "成功",
-              message: "创建成功",
-              type: "success",
-              duration: 2000
-            });
-          });
-        }
-      });
-    },
-    handleUpdate(row) {
-      this.temp = Object.assign({}, row); // copy obj
-      this.temp.timestamp = new Date(this.temp.timestamp);
-      this.dialogStatus = "update";
-      this.dialogFormVisible = true;
-      this.$nextTick(() => {
-        this.$refs["dataForm"].clearValidate();
-      });
-    },
-    updateData() {
-      this.$refs["dataForm"].validate(valid => {
-        if (valid) {
-          const tempData = Object.assign({}, this.temp);
-          tempData.timestamp = +new Date(tempData.timestamp); // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-          updateArticle(tempData).then(() => {
-            for (const v of this.list) {
-              if (v.id === this.temp.id) {
-                const index = this.list.indexOf(v);
-                this.list.splice(index, 1, this.temp);
-                break;
-              }
-            }
-            this.dialogFormVisible = false;
-            this.$notify({
-              title: "成功",
-              message: "更新成功",
-              type: "success",
-              duration: 2000
-            });
-          });
-        }
-      });
+    resetSearchParam() {
+      this.listQuery = {
+        page: 1,
+        limit: 20,
+        importance: undefined,
+        title: undefined,
+        type: undefined,
+        sort: "+id",
+        websiteName: "aiyaku",
+        dateDimension: "d",
+        productName: "",
+        productCode: "",
+        keywords: "",
+        cursor: 0,
+        plusType: "1500",
+        greatOrLow: "10"
+      };
+      this.searchResultOptions = [];
+      this.searchDstResultOptions = [];
+      this.searchSrcResultOptions = [];
     },
     handleDelete(row) {
       this.$notify({
@@ -595,7 +719,6 @@ export default {
         websiteName: row.mainWebsiteName
       };
       list[1] = row;
-      debugger;
       productConfirm(list, -1).then(response => {
         if (response.code == 20000) {
           this.getList();
@@ -610,11 +733,49 @@ export default {
         mainId: row.productId,
         mainRow: row
       });
+      this.listQuery.websiteName = "aiyaku";
+    },
+    handleDetail(row) {
+      var url ="";
+      if (row.websiteName == "aiyaku") {
+        url = "https://www.aiyaku.com" + row.path;
+      }
+      if (row.websiteName == "202832") {
+        url = "https://www.202832.com/product/" + row.path + ".html";
+      }
+      if (row.websiteName == "yayibang") {
+        url = "https://www.yayibang.com/views/web/article/goods_details.html?goods_id=" + row.path;
+      }
+      if(url != ""){
+        window.open(url, "_blank");
+      }
+    },
+    handleSaveNewRelation() {
+      var list = [];
+      list[0] = {
+        productCode: this.temp.srcProductCode,
+        productId: this.temp.srcProductId,
+        websiteName: this.temp.srcWebsite
+      };
+      list[1] = {
+        productCode: this.temp.dstProductCode,
+        productId: this.temp.dstProductId,
+        websiteName: this.temp.dstWebsite
+      };
+      this.listLoading = true;
+      productConfirm(list, 1).then(response => {
+        if (response.code == 20000) {
+          this.getList();
+          this.listLoading = false;
+          this.dialogFormVisible = false;
+        }
+      });
     },
     handleSave(index, row) {
       row.editing = true;
       this.listLoading = true;
       var list = [];
+
       list[0] = row.mainRow;
       list[1] = row;
       list[1].item = null;

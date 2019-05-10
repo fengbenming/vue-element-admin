@@ -42,6 +42,11 @@ service.interceptors.response.use(
    */
   response => {
     const res = response.data
+    var contentType = response.headers["content-type"]
+    if (contentType != undefined && contentType.startsWith('text/html')) {//返回网页
+      location.reload() // 为了重新实例化vue-router对象 避免bug
+    }
+
     if (res.code !== 20000) {
       Message({
         message: res.message || 'error',
