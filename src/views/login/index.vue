@@ -24,12 +24,13 @@
           name="username"
           type="text"
           auto-complete="on"
+          tabindex="1"
         />
       </el-form-item>
 
       <el-tooltip v-model="capsTooltip" content="Caps lock is On" placement="right" manual>
         <el-form-item prop="password">
-          <span class="svg-container">
+          <span class="svg-container" tabindex="-1">
             <svg-icon icon-class="password" />
           </span>
           <el-input
@@ -43,6 +44,7 @@
             @keyup.native="checkCapslock"
             @blur="capsTooltip = false"
             @keyup.enter.native="handleLogin"
+            tabindex="2"
           />
           <span class="show-pwd" @click="showPwd">
             <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
@@ -55,6 +57,7 @@
         type="primary"
         style="width:100%;margin-bottom:30px;"
         @click.native.prevent="handleLogin"
+        tabindex="3"
       >{{ $t('login.logIn') }}</el-button>
 
       <!-- <div style="position:relative">
