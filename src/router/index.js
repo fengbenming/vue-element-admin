@@ -176,8 +176,8 @@ export const asyncRoutes = [
       {
         path: 'priceTrend',
         component: () => import('@/views/magic/priceTrend'),
-        name: '历史趋势',
-        meta: { title: '历史趋势', icon: '', noCache: true }
+        name: '销量历史趋势',
+        meta: { title: '销量历史趋势', icon: '', noCache: true }
       },
       {
         path: 'soso',
