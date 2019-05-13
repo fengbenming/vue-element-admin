@@ -2,16 +2,16 @@
   <el-row :gutter="40" class="panel-group">
     <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col" style="width:100%">
       <el-carousel :interval="400000" trigger="click" type="card" height="120px" @change="carouselChange">
-        <el-carousel-item v-for="item in items" :key="item.ProductId">
+        <el-carousel-item v-for="item in items" :key="item.productId">
           <el-card :body-style="{ padding: '0px' }">
             <!-- <img
               src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
               class="image"
             >-->
             <div style="padding: 14px;">
-              <span>{{ item.ProductName }}</span>
+              <span class="link-type" @click="handleDetail(item)">{{ item.saleName }}</span>
               <div class="bottom clearfix">
-                <el-button type="text" class="button">操作按钮</el-button>
+                <span>{{item.websiteName}}</span>
               </div>
             </div>
           </el-card>
@@ -51,7 +51,22 @@ export default {
     carouselChange(pre, next) {
       debugger
       this.$emit('carouselChange', this.pannelData[pre])
-    }
+    },
+    handleDetail(row) {
+      var url ="";
+      if (row.websiteName == "aiyaku") {
+        url = "https://www.aiyaku.com" + row.path;
+      }
+      if (row.websiteName == "202832") {
+        url = "https://www.202832.com/product/" + row.path + ".html";
+      }
+      if (row.websiteName == "yayibang") {
+        url = "https://www.yayibang.com/views/web/article/goods_details.html?goods_id=" + row.path;
+      }
+      if(url != ""){
+        window.open(url, "_blank");
+      }
+    },
   }
 }
 </script>

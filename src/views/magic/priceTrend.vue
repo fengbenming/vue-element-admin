@@ -17,7 +17,7 @@
           :value="item.key"
         />
       </el-select>
-      <el-date-picker
+      <!-- <el-date-picker
         v-model="listQuery.date"
         type="daterange"
         style="width: 300px;bottom: 4px;"
@@ -26,8 +26,8 @@
         end-placeholder="结束日期"
         format="yyyy-MM-dd"
         value-format="yyyy-MM-dd"
-      />
-      <el-select
+      />-->
+      <!-- <el-select
         v-model="listQuery.brand"
         :placeholder="$t('magic.brand')"
         clearable
@@ -37,10 +37,10 @@
         class="filter-item"
       >
         <el-option v-for="item in brandSet" :key="item" :label="item" :value="item" />
-      </el-select>
+      </el-select>-->
       <el-input
-        v-model="listQuery.productName"
-        :placeholder="$t('magic.productName')"
+        v-model="listQuery.keywords"
+        placeholder="请输入关键词"
         style="width: 200px;"
         class="filter-item"
       />
@@ -51,25 +51,23 @@
         @click="handleFilter"
       >{{ $t('table.search') }}</el-button>
     </div>
-    <panel-group
-      :pannel-data="pannelData"
-      @carouselChange="carouselChange"
-    />
+    <panel-group :pannel-data="pannelData" @carouselChange="carouselChange"/>
 
     <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
-      <line-chart :chart-data="lineChartData" />
+      <line-chart :chart-data="lineChartData"/>
     </el-row>
   </div>
 </template>
 
 <script>
-import PanelGroup from './components/PanelGroup'
-import LineChart from './components/LineChart'
-import { priceSalesTrend, productSellData } from '@/api/sell'
-import { parseTime } from '@/utils'
+import PanelGroup from "./components/PanelGroup";
+import { search } from "@/api/search";
+import LineChart from "./components/LineChart";
+import { priceSalesTrend, productSellData } from "@/api/sell";
+import { parseTime } from "@/utils";
 
 export default {
-  name: 'DashboardAdmin',
+  name: "DashboardAdmin",
   components: {
     PanelGroup,
     LineChart
@@ -77,81 +75,88 @@ export default {
   data() {
     return {
       listQuery: {
-        websiteName: 'aiyaku',
+        websiteName: "aiyaku",
         productId: null,
         page: 1,
         limit: 20,
         importance: undefined,
         title: undefined,
         type: undefined,
-        sort: '+id',
-        dateDimension: 'd',
+        sort: "+id",
+        dateDimension: "d",
         date: [],
         productName: null,
-        brand: null
+        brand: null,
+        keywords:null,
       },
       lineChartData: {},
       pannelData: [],
       websiteNames: [
-        { label: '口腔新干线', key: '202832' },
-        { label: '爱牙库', key: 'aiyaku' },
-        { label: '牙医帮', key: 'yayibang' }
+        { label: "口腔新干线", key: "202832" },
+        { label: "爱牙库", key: "aiyaku" },
+        { label: "牙医帮", key: "yayibang" }
       ],
       brandSet: []
-    }
+    };
   },
   mounted() {
-    const end = new Date()
-    const start = new Date()
-    start.setTime(start.getTime() - 3600 * 1000 * 24 * 10)
+    const end = new Date();
+    const start = new Date();
+    start.setTime(start.getTime() - 3600 * 1000 * 24 * 10);
     this.listQuery.date = [
-      parseTime(start, '{y}-{m}-{d}'),
-      parseTime(end, '{y}-{m}-{d}')
-    ]
-    this.getList()
-    this.handleFilter()
+      parseTime(start, "{y}-{m}-{d}"),
+      parseTime(end, "{y}-{m}-{d}")
+    ];
+    this.getList();
+    this.handleFilter();
   },
   methods: {
     getList() {
       priceSalesTrend(this.listQuery).then(response => {
-        console.log(response.trend)
-        this.lineChartData = response.trend
-      })
+        console.log(response.trend);
+        this.lineChartData = response.trend;
+      });
     },
     handleFilter() {
       if (this.listQuery.date.length == 2) {
-        this.listQuery.startDate = this.listQuery.date[0]
-        this.listQuery.endDate = this.listQuery.date[1]
+        this.listQuery.startDate = this.listQuery.date[0];
+        this.listQuery.endDate = this.listQuery.date[1];
       }
-      console.log(this.listQuery)
-      productSellData(this.listQuery).then(response => {
-        this.pannelData = response.productSell
+      console.log(this.listQuery);
 
-        this.brandSet = new Set()
+      search(this.listQuery).then(response => {
+        console.log(response);
+        this.listQuery.cursor = response.cursor;
+        if (response.related != undefined) {
+          this.pannelData = response.related;
+        }
+
+        debugger;
+        this.brandSet = new Set();
         for (var i in this.pannelData) {
-          if (this.pannelData[i].Brand != '') {
-            this.brandSet.add(this.pannelData[i].Brand)
+          if (this.pannelData[i].Brand != "") {
+            this.brandSet.add(this.pannelData[i].Brand);
           }
         }
 
-        if (this.pannelData.length > 0) {
-          this.listQuery.websiteName = this.pannelData[0].WebsiteName
-          this.listQuery.productId = this.pannelData[0].ProductId
+        if (this.pannelData != undefined && this.pannelData.length > 0) {
+          this.listQuery.websiteName = this.pannelData[0].websiteName;
+          this.listQuery.productId = this.pannelData[0].productId;
         } else {
-          this.listQuery.productId = ''
+          this.listQuery.productId = "";
         }
         // 初始化图标
-        this.getList()
-      })
+        this.getList();
+      });
     },
     carouselChange(res) {
-      debugger
-      this.listQuery.productId = res.ProductId
-      this.listQuery.websiteName = res.WebsiteName
-      this.getList()
+      debugger;
+      this.listQuery.productId = res.productId;
+      this.listQuery.websiteName = res.websiteName;
+      this.getList();
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
