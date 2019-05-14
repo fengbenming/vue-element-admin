@@ -52,7 +52,7 @@
         />
       </el-select>
       <el-select
-        v-model="listQuery.websiteName"
+        v-model="listQuery.websiteNameFilter"
         :placeholder="$t('magic.websiteName')"
         clearable
         default-first-option
@@ -373,7 +373,8 @@ export default {
         keywords: "",
         cursor: 0,
         plusType: "1500",
-        greatOrLow: "10"
+        greatOrLow: "10",
+        websiteNameFilter:"aiyaku"
       },
       brandSet: new Set(),
       categorySet: new Set(),
@@ -586,7 +587,7 @@ export default {
     handleFilter(value) {
       var greatOrLow = this.listQuery.greatOrLow;
       var plusType = this.listQuery.plusType;
-      var websiteName = this.listQuery.websiteName;
+      var websiteName = this.listQuery.websiteNameFilter;
       if (plusType == "" || greatOrLow == "" || websiteName == "") {
         this.list = this.backList;
         return;
@@ -681,22 +682,6 @@ export default {
       };
     },
     resetSearchParam() {
-      this.listQuery = {
-        page: 1,
-        limit: 20,
-        importance: undefined,
-        title: undefined,
-        type: undefined,
-        sort: "+id",
-        websiteName: "aiyaku",
-        dateDimension: "d",
-        productName: "",
-        productCode: "",
-        keywords: "",
-        cursor: 0,
-        plusType: "1500",
-        greatOrLow: "10"
-      };
       this.searchResultOptions = [];
       this.searchDstResultOptions = [];
       this.searchSrcResultOptions = [];
