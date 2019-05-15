@@ -680,6 +680,9 @@ export default {
         dstItem: null,
         srcItem: null
       };
+      this.searchResultOptions = [];
+      this.searchDstResultOptions = [];
+      this.searchSrcResultOptions = [];
     },
     resetSearchParam() {
       this.searchResultOptions = [];

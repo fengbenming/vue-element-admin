@@ -26,7 +26,7 @@
         format="yyyy-MM-dd"
         value-format="yyyy-MM-dd"
       />
-      <el-select
+      <!-- <el-select
         v-model="listQuery.brand"
         :placeholder="$t('magic.brand')"
         clearable
@@ -36,8 +36,14 @@
         class="filter-item"
       >
         <el-option v-for="item in brandSet" :key="item" :label="item" :value="item" />
-      </el-select>
-      <el-input v-model="listQuery.productName" :placeholder="$t('magic.productName')" style="width: 200px;" class="filter-item" />
+      </el-select> -->
+      <!-- <el-input v-model="listQuery.productName" :placeholder="$t('magic.productName')" style="width: 200px;" class="filter-item" /> -->
+       <el-input
+        v-model="listQuery.keywords"
+        placeholder="请输入关键词"
+        style="width: 200px;"
+        class="filter-item"
+      />
       <el-button
         v-waves
         class="filter-item"
@@ -257,7 +263,8 @@ export default {
         dateDimension: 'd',
         date: [],
         productName: null,
-        brand: null
+        brand: null,
+        cursor: 0,
       },
       brandSet: new Set(),
       categorySet: new Set(),
