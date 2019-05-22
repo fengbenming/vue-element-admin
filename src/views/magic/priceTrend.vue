@@ -2,7 +2,7 @@
   <div class="dashboard-editor-container">
     <!-- <github-corner class="github-corner" /> -->
     <div class="filter-container">
-      <el-select
+      <!-- <el-select
         v-model="listQuery.websiteName"
         :placeholder="$t('magic.websiteName')"
         clearable
@@ -16,7 +16,7 @@
           :label="item.label"
           :value="item.key"
         />
-      </el-select>
+      </el-select> -->
       <!-- <el-date-picker
         v-model="listQuery.date"
         type="daterange"
@@ -40,8 +40,8 @@
       </el-select>-->
       <el-input
         v-model="listQuery.keywords"
-        placeholder="请输入关键词"
-        style="width: 200px;"
+        placeholder="请输入关键词 可带站点名称"
+        style="width: 210px;"
         class="filter-item"
       />
       <el-button
@@ -65,9 +65,10 @@ import { search } from "@/api/search";
 import LineChart from "./components/LineChart";
 import { priceSalesTrend, productSellData } from "@/api/sell";
 import { parseTime } from "@/utils";
+import store from "../../store/index.js";
 
 export default {
-  name: "DashboardAdmin",
+  name: "priceTrend",
   components: {
     PanelGroup,
     LineChart
@@ -91,13 +92,13 @@ export default {
       },
       lineChartData: {},
       pannelData: [],
-      websiteNames: [
-        { label: "口腔新干线", key: "202832" },
-        { label: "爱牙库", key: "aiyaku" },
-        { label: "牙医帮", key: "yayibang" }
-      ],
       brandSet: []
     };
+  },
+  computed:{
+    websiteNames(){
+      return store.state.commonData.websiteNames
+    },
   },
   mounted() {
     const end = new Date();
@@ -124,6 +125,7 @@ export default {
       }
       console.log(this.listQuery);
 
+      
       search(this.listQuery).then(response => {
         console.log(response);
         this.listQuery.cursor = response.cursor;

@@ -125,16 +125,17 @@ export const asyncRoutes = [
     ]
   },
   {
-    path: '',
+    path: '/magic',
     component: Layout,
-    // redirect: 'magic',
+    redirect: '/magic/sell',
     alwaysShow: false, // will always show the root menu
     meta: {
       roles: ['admin', 'editor', 'magic'],
       title: '魔方',
       icon: 'list',
-      noCache: true,
-      breadcrumb: false
+      noCache: false,
+      breadcrumb: false,
+      keepAlive: true 
     },
     children: [
       {
@@ -159,7 +160,7 @@ export const asyncRoutes = [
         path: 'productSell',
         component: () => import('@/views/magic/productSell'),
         name: '产品销量统计',
-        meta: { title: '产品销量统计', icon: '', noCache: false, keepAlive: true }
+        meta: {title: '产品销量统计', icon: '', noCache: false }
       },
       {
         path: 'priceChange',
@@ -182,8 +183,8 @@ export const asyncRoutes = [
       {
         path: 'soso',
         component: () => import('@/views/magic/soso'),
-        name: '搜一搜',
-        meta: { title: '搜一搜(待续)', icon: '', noCache: true }
+        name: '随性搜',
+        meta: { title: '随性搜(待续)', icon: '', noCache: true }
       }
     ]
   },

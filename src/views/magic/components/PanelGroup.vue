@@ -63,6 +63,9 @@ export default {
       if (row.websiteName == "yayibang") {
         url = "https://www.yayibang.com/views/web/article/goods_details.html?goods_id=" + row.path;
       }
+      if (row.websiteName == "yae920") {
+        url = "http://www.yae920.com/" + row.path;
+      }
       if(url != ""){
         window.open(url, "_blank");
       }

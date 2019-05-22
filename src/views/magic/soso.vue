@@ -1,9 +1,11 @@
 <template>
-  <div class="app-container" style="position: absolute;top: 20%;left: 20%;">
+  <div class="app-container" style="position: absolute;top: 5%;left: 5%;">
     <div class="filter-container">
       <el-input
-        style="width: 200px;"
+        placeholder="请输入关键词 可带站点名称"
+        style="width: 210px;"
         class="filter-item"
+        v-model="listQuery.keywords"
       />
       <el-button
         v-waves
@@ -13,16 +15,86 @@
         @click="handleFilter"
       >{{ $t('table.search') }}</el-button>
     </div>
-    <div style="position: relative;top: 50%;left: 50%;">
-    <el-row :gutter="20">
-      <el-col :span="120">
-        <div class="grid-content">未完待续</div>
-      </el-col>
-    </el-row>
+    <div style="position: relative;">
+      <el-collapse accordion style="width:800px;overflow:auto;">
+        <el-collapse-item v-for="item in list" :key="item.id" style="overflow:auto;">
+          <template slot="title" style="overflow:auto;">
+            <span>{{websiteKeys[item.websiteName]}} {{item.saleName}}</span>
+          </template>
+          <div>{{item.brand}}</div>
+          <div>{{item.price}}</div>
+          <div>{{item.saleName}}</div>
+          <el-link @click="goToDetail(item)" type="success">详情</el-link>
+        </el-collapse-item>
+      </el-collapse>
+    </div>
   </div>
-  </div>
-  
 </template>
+<script>
+import { search } from "@/api/search";
+import store from "../../store/index.js";
+import waves from "@/directive/waves"; // Waves directive
+
+export default {
+  directives: { waves },
+  data() {
+    return {
+      websiteKeys:{}
+    };
+  },
+  computed: {
+    list() {
+      return store.state.soso.list;
+    },
+    listQuery() {
+      return store.state.soso.listQuery;
+    },
+    websiteNames(){
+      return store.state.commonData.websiteNames
+    },
+  },
+  mounted(){
+    for( var index in this.websiteNames){
+      this.websiteKeys[this.websiteNames[index].key] = this.websiteNames[index].label+": \r\n"
+    }
+  },
+  methods: {
+    goToDetail(row) {
+      var url = "";
+      if (row.websiteName == "aiyaku") {
+        url = "https://www.aiyaku.com" + row.path;
+      }
+      if (row.websiteName == "202832") {
+        url = "https://www.202832.com/product/" + row.path + ".html";
+      }
+      if (row.websiteName == "yayibang") {
+        url =
+          "https://www.yayibang.com/views/web/article/goods_details.html?goods_id=" +
+          row.path;
+      }
+      if (row.websiteName == "yae920") {
+        url = "http://www.yae920.com/" + row.path;
+      }
+      if (url != "") {
+        window.open(url, "_blank");
+      }
+    },
+    handleFilter() {
+      this.searchProduct();
+    },
+    searchProduct() {
+      this.searchLoading = true;
+      search(this.listQuery).then(response => {
+        console.log(response);
+        this.listQuery.cursor = response.cursor;
+        store.commit("soso/refreshData", response.related);
+        store.commit("soso/refreshParam", this.listQuery);
+        this.searchLoading = false;
+      });
+    }
+  }
+};
+</script>
 
 <style>
 .el-row {

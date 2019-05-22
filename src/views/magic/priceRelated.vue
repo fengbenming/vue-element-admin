@@ -317,6 +317,7 @@ import waves from "@/directive/waves"; // Waves directive
 import { parseTime } from "@/utils";
 import Pagination from "@/components/Pagination"; // Secondary package based on el-pagination
 import { productConfirm } from "@/api/relate";
+import store from "../../store/index.js";
 
 const calendarTypeOptions = [
   { key: "CN", display_name: "China" },
@@ -393,11 +394,6 @@ export default {
         { label: "等于", key: "0" },
         { label: "大于等于", key: "10" }
       ],
-      websiteNames: [
-        { label: "口腔新干线", key: "202832" },
-        { label: "爱牙库", key: "aiyaku" },
-        { label: "牙医帮", key: "yayibang" }
-      ],
       dateDimensions: [
         { label: "日", key: "d" },
         { label: "周", key: "w" },
@@ -455,6 +451,11 @@ export default {
       yesterday: new Date(),
       specId: null
     };
+  },
+  computed:{
+    websiteNames(){
+      return store.state.commonData.websiteNames
+    },
   },
   created() {
     this.getList();

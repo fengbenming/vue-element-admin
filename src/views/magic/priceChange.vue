@@ -207,6 +207,7 @@ import { productPriceChangeData } from '@/api/sell'
 import waves from '@/directive/waves' // Waves directive
 import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
+import store from "../../store/index.js";
 
 const calendarTypeOptions = [
   { key: 'CN', display_name: 'China' },
@@ -251,18 +252,12 @@ export default {
         title: undefined,
         type: undefined,
         sort: '+id',
-        websiteName: 'all',
+        websiteName: '爱牙库',
         dateDimension: 'd',
         date: null
       },
       brandSet: new Set(),
       categorySet: new Set(),
-      websiteNames: [
-        { label: '所有', key: 'all' },
-        { label: '口腔新干线', key: '202832' },
-        { label: '爱牙库', key: 'aiyaku' },
-        { label: '牙医帮', key: 'yayibang' }
-      ],
       dateDimensions: [
         { label: '日', key: 'd' },
         { label: '周', key: 'w' },
@@ -312,6 +307,11 @@ export default {
       yesterday: new Date(),
       defaultValue: null
     }
+  },
+  computed:{
+    websiteNames(){
+      return store.state.commonData.websiteNames
+    },
   },
   created() {
     this.getList()
