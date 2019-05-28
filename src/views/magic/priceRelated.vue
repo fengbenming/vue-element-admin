@@ -96,7 +96,7 @@
       <el-table-column :label="$t('magic.websiteName')" prop="id" align="center" width="120">
         <template slot-scope="scope">
           <div v-if="scope.row.websiteName=='202832' || !scope.row.editing">
-            <span>{{ scope.row.websiteName }}</span>
+            <span>{{ websiteKeys[scope.row.websiteName] }}</span>
           </div>
           <div v-else>
             <el-select
@@ -162,11 +162,6 @@
           <span>{{ scope.row[1501] }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('C')" width="60px" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row[1502] }}</span>
-        </template>
-      </el-table-column>
       <el-table-column :label="$t('B1')" width="60px" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row[1503] }}</span>
@@ -175,6 +170,11 @@
       <el-table-column :label="$t('B2')" width="60px" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row[1504] }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('C')" width="60px" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row[1502] }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" width="150px">
@@ -351,6 +351,7 @@ export default {
   },
   data() {
     return {
+      websiteKeys:{},
       searchResultOptions: [],
       searchSrcResultOptions: [],
       searchDstResultOptions: [],
@@ -460,7 +461,11 @@ export default {
   created() {
     this.getList();
   },
-  mounted() {},
+  mounted() {
+    for( var index in this.websiteNames){
+      this.websiteKeys[this.websiteNames[index].key] = this.websiteNames[index].label
+    }
+  },
   methods: {
     handleAddNewRelation() {
       this.resetTemp();
@@ -734,6 +739,9 @@ export default {
       }
       if (row.websiteName == "yayibang") {
         url = "https://www.yayibang.com/views/web/article/goods_details.html?goods_id=" + row.path;
+      }
+      if (row.websiteName == "yae920") {
+        url = "http://www.yae920.com/" + row.path;
       }
       if(url != ""){
         window.open(url, "_blank");

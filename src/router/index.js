@@ -184,7 +184,7 @@ export const asyncRoutes = [
         path: 'soso',
         component: () => import('@/views/magic/soso'),
         name: '随性搜',
-        meta: { title: '随性搜(待续)', icon: '', noCache: true }
+        meta: { title: '搜(实验室)', icon: '', noCache: true }
       }
     ]
   },

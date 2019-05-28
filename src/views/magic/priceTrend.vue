@@ -76,7 +76,7 @@ export default {
   data() {
     return {
       listQuery: {
-        websiteName: "aiyaku",
+        websiteName: "",
         productId: null,
         page: 1,
         limit: 20,
@@ -125,7 +125,7 @@ export default {
       }
       console.log(this.listQuery);
 
-      
+      this.listQuery.websiteName = ""//去掉站点，任意搜
       search(this.listQuery).then(response => {
         console.log(response);
         this.listQuery.cursor = response.cursor;
