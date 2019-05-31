@@ -50,7 +50,33 @@ Object.keys(filters).forEach(key => {
 })
 
 Vue.config.productionTip = false
-
+Vue.prototype.goToDetail = function(row) {
+  debugger
+  var url = "";
+  if (row.websiteName == "aiyaku") {
+    url = "https://www.aiyaku.com" + row.path;
+  }
+  if (row.websiteName == "202832") {
+    url = "https://www.202832.com/product/" + row.path + ".html";
+  }
+  if (row.websiteName == "yayibang") {
+    url =
+      "https://www.yayibang.com/views/web/article/goods_details.html?goods_id=" +
+      row.path;
+  }
+  if (row.websiteName == "yae920") {
+    url = "http://www.yae920.com/" + row.path;
+  }
+  if (row.websiteName == "mmm920") {
+    url = row.path;
+  }
+  if (row.websiteName == "detal360") {
+    url = row.path;
+  }
+  if (url != "") {
+    window.open(url, "_blank");
+  }
+}
 new Vue({
   el: '#app',
   router,

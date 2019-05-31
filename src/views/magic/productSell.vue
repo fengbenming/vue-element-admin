@@ -76,7 +76,7 @@
       <el-table-column type="index"/>
       <el-table-column :label="$t('magic.websiteName')" prop="id" align="center" width="80">
         <template slot-scope="scope">
-          <span>{{ scope.row.WebsiteName }}</span>
+          <span>{{ websiteKeys[scope.row.WebsiteName] }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('magic.category3')" prop="Category" width="150px" align="center">
@@ -249,6 +249,7 @@ export default {
   },
   data() {
     return {
+      websiteKeys:[],
       tableKey: 0,
       listLoading: false,
       listQuery: {
@@ -331,6 +332,9 @@ export default {
   },
   mounted() {
     this.listQuery = store.state.productSell.listQuery;
+    for( var index in this.websiteNames){
+      this.websiteKeys[this.websiteNames[index].key] = this.websiteNames[index].label
+    }
     console.log("*****@@ enter mounted****");
     // const end = store.state.productSell.end
     // const start = store.state.productSell.start

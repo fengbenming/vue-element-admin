@@ -123,7 +123,7 @@
       >
         <template slot-scope="scope">
           <div v-if="!scope.row.editing">
-            <span class="link-type" @click="handleDetail(scope.row)">{{ scope.row.saleName }}</span>
+            <span class="link-type" @click="goToDetail(scope.row)">{{ scope.row.saleName }}</span>
           </div>
           <div v-else>
             <el-select
@@ -728,24 +728,6 @@ export default {
         mainRow: row
       });
       this.listQuery.websiteName = "aiyaku";
-    },
-    handleDetail(row) {
-      var url ="";
-      if (row.websiteName == "aiyaku") {
-        url = "https://www.aiyaku.com" + row.path;
-      }
-      if (row.websiteName == "202832") {
-        url = "https://www.202832.com/product/" + row.path + ".html";
-      }
-      if (row.websiteName == "yayibang") {
-        url = "https://www.yayibang.com/views/web/article/goods_details.html?goods_id=" + row.path;
-      }
-      if (row.websiteName == "yae920") {
-        url = "http://www.yae920.com/" + row.path;
-      }
-      if(url != ""){
-        window.open(url, "_blank");
-      }
     },
     handleSaveNewRelation() {
       var list = [];

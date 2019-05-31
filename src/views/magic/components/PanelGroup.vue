@@ -9,7 +9,7 @@
               class="image"
             >-->
             <div style="padding: 14px;">
-              <span class="link-type" @click="handleDetail(item)">{{ item.saleName }}</span>
+              <span class="link-type" @click="goToDetail(item)">{{ item.saleName }}</span>
               <div class="bottom clearfix">
                 <span>{{item.websiteName}}</span>
               </div>
@@ -51,24 +51,6 @@ export default {
     carouselChange(pre, next) {
       debugger
       this.$emit('carouselChange', this.pannelData[pre])
-    },
-    handleDetail(row) {
-      var url ="";
-      if (row.websiteName == "aiyaku") {
-        url = "https://www.aiyaku.com" + row.path;
-      }
-      if (row.websiteName == "202832") {
-        url = "https://www.202832.com/product/" + row.path + ".html";
-      }
-      if (row.websiteName == "yayibang") {
-        url = "https://www.yayibang.com/views/web/article/goods_details.html?goods_id=" + row.path;
-      }
-      if (row.websiteName == "yae920") {
-        url = "http://www.yae920.com/" + row.path;
-      }
-      if(url != ""){
-        window.open(url, "_blank");
-      }
     },
   }
 }
