@@ -2,7 +2,7 @@ const state = {
   list: [],
   listQuery: {
     page: 1,
-    limit: 5,
+    limit: 8,
     importance: undefined,
     title: undefined,
     type: undefined,

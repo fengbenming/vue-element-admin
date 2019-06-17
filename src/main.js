@@ -70,7 +70,7 @@ Vue.prototype.goToDetail = function(row) {
   if (row.websiteName == "mmm920") {
     url = row.path;
   }
-  if (row.websiteName == "detal360") {
+  if (row.websiteName == "dental360") {
     url = row.path;
   }
   if (url != "") {
