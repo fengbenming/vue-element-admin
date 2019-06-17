@@ -6,6 +6,7 @@ const state = {
         { label: "牙医在线", key: "yae920" },
         { label: "梅苗苗", key: "mmm920" },
         { label: "牙医管家", key: "dental360" },
+        { label: "快全", key: "kqkqsc" },
     ],
 }
 const mutations = {
