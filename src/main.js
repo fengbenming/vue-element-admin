@@ -74,7 +74,7 @@ Vue.prototype.goToDetail = function(row) {
     url = row.path;
   }
   if (row.websiteName == "kqkqsc") {
-    url = "http://http://www.kqkqsc.com/"+row.path;
+    url = "http://www.kqkqsc.com/"+row.path;
   }
   if (url != "") {
     window.open(url, "_blank");
