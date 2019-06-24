@@ -62,13 +62,13 @@ export default {
       this.series = []
       this.chart = echarts.init(document.getElementById(this.id));
       for (var index in this.seriesData) {
-        var areaStyleColorArr = ["rgba(137, 189, 27, 0.3)","rgba(0, 136, 212, 0.3)","rgba(219, 50, 51, 0.3)","rgba(300, 90, 800, 0.3)","rgba(400, 30, 600, 0.3)","rgba(350, 360, 660, 0.3)"]
+        var areaStyleColorArr = ["rgba(137, 189, 27, 0.3)","rgba(0, 136, 212, 0.3)","rgba(219, 50, 51, 0.3)","rgba(300, 90, 800, 0.3)","rgba(400, 30, 600, 0.3)","rgba(350, 360, 660, 0.3)","rgba(850, 160, 360, 0.3)","rgba(450, 860, 1260, 0.3)"]
         var areaStyleColor
         if(index<areaStyleColorArr.length){
             areaStyleColor = areaStyleColorArr[index]
         }
         
-        var itemStyleColorArr = ["rgb(137, 189, 27)","rgb(0, 136, 212)","rgb(219, 50, 51)","rgb(300, 90, 800)","rgb(400, 30, 600)","rgb(350, 360, 660)"]
+        var itemStyleColorArr = ["rgb(137, 189, 27)","rgb(0, 136, 212)","rgb(219, 50, 51)","rgb(300, 90, 800)","rgb(400, 30, 600)","rgb(350, 360, 660)","rgb(850, 160, 360)","rgb(450, 860, 1260)"]
         var itemStyleColor
         if(index<itemStyleColorArr.length){
             itemStyleColor = itemStyleColorArr[index]

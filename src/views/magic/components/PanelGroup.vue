@@ -11,7 +11,7 @@
             <div style="padding: 14px;">
               <span class="link-type" @click="goToDetail(item)">{{ item.saleName }}</span>
               <div class="bottom clearfix">
-                <span>{{item.websiteName}}</span>
+                <span>{{item.websiteAliasName}}</span>
               </div>
             </div>
           </el-card>

@@ -79,11 +79,11 @@
           <span>{{ websiteKeys[scope.row.WebsiteName] }}</span>
         </template>
       </el-table-column>
-      <el-table-column :label="$t('magic.category3')" prop="Category" width="150px" align="center">
+      <!-- <el-table-column :label="$t('magic.category3')" prop="Category" width="150px" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.Category }}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column
         :label="$t('magic.brand')"
         prop="Brand"
