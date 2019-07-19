@@ -97,7 +97,7 @@
       </el-table-column>
       <el-table-column :label="$t('magic.productName')" width="250px" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.ProductName }}</span>
+          <span class="link-type" @click="handleClick(scope.row)">{{ scope.row.ProductName }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -336,28 +336,13 @@ export default {
       this.websiteKeys[this.websiteNames[index].key] = this.websiteNames[index].label
     }
     console.log("*****@@ enter mounted****");
-    // const end = store.state.productSell.end
-    // const start = store.state.productSell.start
-    // start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-    // this.listQuery.date = [
-    //   parseTime(start, "{y}-{m}-{d}"),
-    //   parseTime(end, "{y}-{m}-{d}")
-    // ];
-    // this.getList();
   },
-  //  activated() {
-  //     console.log("******* enter activeated *****");
-  //   },
-  //   deactivated() {
-  //     console.log("******* enter deactivated *****");
-  //   },
-  //   destroyed() {
-  //     console.log("******* enter destroyed *****");
-  //   },
-  //   beforeRouteEnter(){
-  //     console.log("******* enter beforeRouteEnter *****");
-  //   },
   methods: {
+    handleClick(row){
+      var param = row.WebsiteName+' '+row.ProductName     
+      console.log(param)
+      this.$router.push({ path: `/magic/priceTrend`,query: {name: param} })
+    },
     getList() {
       this.listLoading = true;
       if (this.listQuery.date.length == 2) {

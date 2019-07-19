@@ -101,6 +101,7 @@ export default {
     },
   },
   mounted() {
+    this.listQuery.keywords = this.$route.query.name
     const end = new Date();
     const start = new Date();
     start.setTime(start.getTime() - 3600 * 1000 * 24 * 10);
@@ -133,7 +134,6 @@ export default {
           this.pannelData = response.related;
         }
 
-        debugger;
         this.brandSet = new Set();
         for (var i in this.pannelData) {
           if (this.pannelData[i].Brand != "") {
@@ -152,7 +152,6 @@ export default {
       });
     },
     carouselChange(res) {
-      debugger;
       this.listQuery.productId = res.productId;
       this.listQuery.websiteName = res.websiteName;
       this.getList();

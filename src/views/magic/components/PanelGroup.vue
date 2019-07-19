@@ -49,7 +49,6 @@ export default {
   },
   methods: {
     carouselChange(pre, next) {
-      debugger
       this.$emit('carouselChange', this.pannelData[pre])
     },
   }
