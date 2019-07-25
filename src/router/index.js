@@ -135,7 +135,7 @@ export const asyncRoutes = [
       icon: 'list',
       noCache: false,
       breadcrumb: false,
-      keepAlive: true 
+      keepAlive: true
     },
     children: [
       {
@@ -143,6 +143,12 @@ export const asyncRoutes = [
         component: () => import('@/views/magic/sell'),
         name: '单日销售统计',
         meta: { title: '单日销售统计', noCache: false, roles: ['admin', 'editor', 'magic'] }
+      },
+      {
+        path: 'sellByWeek',
+        component: () => import('@/views/magic/sellByWeek'),
+        name: '每周销售统计',
+        meta: { title: '每周销售统计', noCache: false, roles: ['admin', 'editor', 'magic'] }
       },
       {
         path: 'purchase',
@@ -160,7 +166,7 @@ export const asyncRoutes = [
         path: 'productSell',
         component: () => import('@/views/magic/productSell'),
         name: '产品销量统计',
-        meta: {title: '产品销量统计', icon: '', noCache: false }
+        meta: { title: '产品销量统计', icon: '', noCache: false }
       },
       {
         path: 'priceChange',

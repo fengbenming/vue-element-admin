@@ -89,6 +89,7 @@ export default {
         productName: null,
         brand: null,
         keywords:null,
+        searchType:'all',
       },
       lineChartData: {},
       pannelData: [],
