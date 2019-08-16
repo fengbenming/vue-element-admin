@@ -15,6 +15,66 @@ export function categorySellData(params) {
   })
 }
 
+export function staticsCategorySellData(params) {
+  return request({
+    url: '/magic/thirdCategorySaleStatics',
+    method: 'get',
+    params
+  })
+}
+
+export function ThirdCategorySaleStaticsForSunburst(params) {
+  return request({
+    url: '/magic/ThirdCategorySaleStaticsForSunburst',
+    method: 'get',
+    params
+  })
+}
+
+export function thirdCategorySaleDifferenceStatics(params) {
+  return request({
+    url: '/magic/ThirdCategorySaleDifferenceStatics',
+    method: 'get',
+    params
+  })
+}
+
+export function userSaleStatics(params) {
+  return request({
+    url: '/magic/UserSaleStatics',
+    method: 'get',
+    params
+  })
+}
+export function BrandProductSaleStatics(params) {
+  return request({
+    url: '/magic/BrandProductSaleStatics',
+    method: 'get',
+    params
+  })
+}
+export function ProductCategorySaleStatics(params) {
+  return request({
+    url: '/magic/ProductCategorySaleStatics',
+    method: 'get',
+    params
+  })
+}
+export function BrandSaleStatics(params) {
+  return request({
+    url: '/magic/BrandSaleStatics',
+    method: 'get',
+    params
+  })
+}
+export function ProductSaleStatics(params) {
+  return request({
+    url: '/magic/ProductSaleStatics',
+    method: 'get',
+    params
+  })
+}
+
 export function productSellData(params) {
   return request({
     url: '/magic/productSell',

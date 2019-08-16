@@ -28,12 +28,12 @@ import axios from 'axios'
 // 设置全局变量
 Vue.prototype.GLOBAL = global_
 // mock api in github pages site build
-if (process.env.NODE_ENV === 'production') {
-  mockXHR()
-  axios.defaults.baseURL = global_.PRO_BASE_URL
-} else {
+if (process.env.LOCAL_SERVER === 'localhost') {
   mockXHR()
   axios.defaults.baseURL = global_.LOCAL_BASE_URL
+} else {
+  mockXHR()
+  axios.defaults.baseURL = global_.PRO_BASE_URL
 }
 
 Vue.use(Element, {
@@ -50,34 +50,34 @@ Object.keys(filters).forEach(key => {
 })
 
 Vue.config.productionTip = false
-Vue.prototype.goToDetail = function(row) {
+Vue.prototype.goToDetail = function (row) {
   debugger
-  var url = "";
-  if (row.websiteName == "aiyaku") {
-    url = "https://www.aiyaku.com" + row.path;
+  var url = ''
+  if (row.websiteName === 'aiyaku') {
+    url = 'https://www.aiyaku.com' + row.path
   }
-  if (row.websiteName == "202832") {
-    url = "https://www.202832.com/product/" + row.path + ".html";
+  if (row.websiteName === '202832') {
+    url = 'https://www.202832.com/product/' + row.path + '.html'
   }
-  if (row.websiteName == "yayibang") {
+  if (row.websiteName === 'yayibang') {
     url =
-      "https://www.yayibang.com/views/web/article/goods_details.html?goods_id=" +
-      row.path;
+      'https://www.yayibang.com/views/web/article/goods_details.html?goods_id=' +
+      row.path
   }
-  if (row.websiteName == "yae920") {
-    url = "http://www.yae920.com/" + row.path;
+  if (row.websiteName === 'yae920') {
+    url = 'http://www.yae920.com/' + row.path
   }
-  if (row.websiteName == "mmm920") {
-    url = row.path;
+  if (row.websiteName === 'mmm920') {
+    url = row.path
   }
-  if (row.websiteName == "dental360") {
-    url = row.path;
+  if (row.websiteName === 'dental360') {
+    url = row.path
   }
-  if (row.websiteName == "kqkqsc") {
-    url = "http://www.kqkqsc.com/"+row.path;
+  if (row.websiteName === 'kqkqsc') {
+    url = 'http://www.kqkqsc.com/' + row.path
   }
-  if (url != "") {
-    window.open(url, "_blank");
+  if (url !== '') {
+    window.open(url, '_blank')
   }
 }
 new Vue({

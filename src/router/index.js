@@ -139,6 +139,70 @@ export const asyncRoutes = [
     },
     children: [
       {
+        path: 'sale',
+        component: () => import('@/views/magic/sale/index'), // Parent router-view
+        name: '销量',
+        redirect: '/magic/sale/categoryByMonth',
+        meta: {
+          roles: ['admin', 'editor', 'magic'],
+          title: '销量',
+          icon: 'list',
+          noCache: false,
+          breadcrumb: false,
+          keepAlive: true
+        },
+        children: [
+          {
+            path: 'categoryByMonth',
+            component: () => import('@/views/magic/sale/categoryByMonth'),
+            name: '分类销售额',
+            meta: { title: '分类销售额', noCache: false, roles: ['admin', 'editor', 'magic'] }
+          },
+          {
+            path: 'categorySaleBySunburst',
+            component: () => import('@/views/magic/sale/categorySaleBySunburst'),
+            name: '饼图分类销售额',
+            meta: { title: '饼图分类销售额', noCache: false, roles: ['admin', 'editor', 'magic'] }
+          },
+          {
+            path: 'categoryByMonthDifference',
+            component: () => import('@/views/magic/sale/categoryByMonthDifference'),
+            name: '分类增长曲线',
+            meta: { title: '分类增长曲线', noCache: false, roles: ['admin', 'editor', 'magic'] }
+          },
+          {
+            path: 'userSale',
+            component: () => import('@/views/magic/sale/userSale'),
+            name: '用户销售额',
+            meta: { title: '用户销售额', noCache: false, roles: ['admin', 'editor', 'magic'] }
+          },
+          {
+            path: 'brandSale',
+            component: () => import('@/views/magic/sale/brandSale'),
+            name: '品牌排名',
+            meta: { title: '品牌排名', noCache: false, roles: ['admin', 'editor', 'magic'] }
+          },
+          {
+            path: 'brandProductSale',
+            component: () => import('@/views/magic/sale/brandProductSale'),
+            name: '品牌下销量排名',
+            meta: { title: '品牌下销量排名', noCache: false, roles: ['admin', 'editor', 'magic'] }
+          },
+          {
+            path: 'ProductCategorySaleStatics',
+            component: () => import('@/views/magic/sale/ProductCategorySaleStatics'),
+            name: '分类下销量排名',
+            meta: { title: '分类下销量排名', noCache: false, roles: ['admin', 'editor', 'magic'] }
+          },
+          {
+            path: 'ProductSaleStatics',
+            component: () => import('@/views/magic/sale/ProductSaleStatics'),
+            name: '产品销量排名',
+            meta: { title: '产品销量排名', noCache: false, roles: ['admin', 'editor', 'magic'] }
+          }
+        ]
+      },
+      {
         path: 'sell',
         component: () => import('@/views/magic/sell'),
         name: '单日销售统计',
