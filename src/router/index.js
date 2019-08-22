@@ -165,6 +165,12 @@ export const asyncRoutes = [
             meta: { title: '饼图分类销售额', noCache: false, roles: ['admin', 'editor', 'magic'] }
           },
           {
+            path: '指标概览',
+            component: () => import('@/views/magic/sale/summary'),
+            name: '指标概览',
+            meta: { title: '指标概览', noCache: false, roles: ['admin', 'editor', 'magic'] }
+          },
+          {
             path: 'categoryByMonthDifference',
             component: () => import('@/views/magic/sale/categoryByMonthDifference'),
             name: '分类增长曲线',

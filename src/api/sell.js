@@ -30,6 +30,14 @@ export function ThirdCategorySaleStaticsForSunburst(params) {
     params
   })
 }
+export function summary(params) {
+  return request({
+    url: '/magic/summary',
+    method: 'get',
+    params
+  })
+}
+
 
 export function thirdCategorySaleDifferenceStatics(params) {
   return request({
