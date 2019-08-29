@@ -29,7 +29,7 @@
         @click="refreshData"
       >{{ $t('table.search') }}</el-button>
     </div>
-    <chart height="95%" width="100%" id="categoryByMonth" :websiteName="listQuery.websiteName" />
+    <chart height="95%" width="100%" id="stackedLineChart" :websiteName="listQuery.websiteName" />
   </div>
 </template>
 

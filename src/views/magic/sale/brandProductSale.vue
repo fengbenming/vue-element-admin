@@ -27,7 +27,7 @@
         placeholder="请输入分类名称"
         style="width: 200px;"
         class="filter-item"
-        :disabled="true"
+        :disabled="false"
         @change="handleChange"
       />
       <el-button

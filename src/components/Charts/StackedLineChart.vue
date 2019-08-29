@@ -243,3 +243,11 @@ export default {
   store
 };
 </script>
+
+<style scoped>
+.stackedLineChart {
+  position: relative;
+  width: 100%;
+  /* height: calc(100vh - 84px); */
+}
+</style>
