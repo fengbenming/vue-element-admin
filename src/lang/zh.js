@@ -183,6 +183,13 @@ export default {
     productName: '产品名称',
     price: '价格',
     productCode: '产品编码',
-    newRelation: '新增'
+    newRelation: '新增',
+    start: '开始时间',
+    end: '结束时间',
+    desc: '描述',
+    totalSelf: '活动产品销量',
+    totalOther: '带动销量',
+    newUserNum: '新注册用户',
+    activOldUserNum: '激活老用户'
   }
 }

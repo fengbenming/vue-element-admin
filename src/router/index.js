@@ -139,6 +139,28 @@ export const asyncRoutes = [
     },
     children: [
       {
+        path: 'activity',
+        component: () => import('@/views/magic/activity/summary'),
+        name: '活动',
+        redirect: '/magic/activity/summary',
+        meta: {
+          roles: ['admin', 'editor', 'magic'],
+          title: '活动',
+          icon: 'list',
+          noCache: false,
+          breadcrumb: false,
+          keepAlive: true
+        },
+        children: [
+          {
+            path: '活动概览',
+            component: () => import('@/views/magic/activity/summary'),
+            name: '活动概览',
+            meta: { title: '活动概览', noCache: false, roles: ['admin', 'editor', 'magic'] }
+          }
+        ]
+      },
+      {
         path: 'sale',
         component: () => import('@/views/magic/sale/index'), // Parent router-view
         name: '销量',
